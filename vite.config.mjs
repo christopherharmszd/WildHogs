@@ -10,6 +10,8 @@ export default defineConfig({
         main: "index.html",
         aktuelles: "aktuelles.html",
         kontakt: "kontakt.html",
+        impressum: "impressum.html",
+        datenschutz: "datenschutz.html",
       },
     },
   },
