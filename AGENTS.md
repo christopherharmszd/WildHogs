@@ -15,9 +15,9 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Use port `4182` for the Wild-Hogs local preview so it stays separate from other local prototypes.
 - Blog overview cards use a small curated preview; clicking a card opens a detail view with the complete photo series from its matching source folder. Keep gallery tiles responsive and avoid cutting off photos at smaller widths.
 - Use a dedicated `kontakt.html` page for all contact/probetraining links, with Manuela Oestreich's phone number and the form; the homepage keeps only a compact contact teaser.
-- Include the seven Strohballen `.mov` videos as playable media in the Strohballen detail view alongside its 13 photos.
+- Keep the seven original Strohballen `.mov` videos out of this published prototype; they can be added later in a suitable format. The 13 photos remain in the detail gallery.
 - Detail-page photos open in a large click-through lightbox with previous/next controls and Escape/backdrop close.
 - Keep Training & Spiele as a separate Vereinsleben gallery, outside the Blog stories; its overview preview links to the complete source-folder gallery.
 - Keep social links close to Vereinsleben & Aktuelles; show the Instagram icon and channel link consistently in the footer of every page.
 - On the homepage, place the Vereinsleben and Instagram buttons directly below the Vereinsleben text, one below the other; neither button should overlay the photo.
-- The new repository publishes the Vite build from `dist/client` through GitHub Actions to GitHub Pages. Keep internal links and assets aware of the repository base path; leave the former Cloudflare site available until the new Pages site is verified.
+- This public repository and `/Users/christopher.harms/Documents/GitHub/WildHogs` are the canonical website source. GitHub Actions publishes the Vite build from `dist/client` to GitHub Pages. Keep internal links and assets aware of the repository base path. The former private `WildHogs-Cloudflare-Archiv` repository and Cloudflare site remain available until separately retired.
