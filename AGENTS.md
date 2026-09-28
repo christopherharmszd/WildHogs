@@ -16,6 +16,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Blog overview cards use a small curated preview; clicking a card opens a detail view with the complete photo series from its matching source folder. Keep gallery tiles responsive and avoid cutting off photos at smaller widths.
 - Use a dedicated `kontakt.html` page for all contact/probetraining links, with Manuela Oestreich's phone number and the form; the homepage keeps only a compact contact teaser.
 - Keep the seven original Strohballen `.mov` videos out of this published prototype; they can be added later in a suitable format. The 13 photos remain in the detail gallery.
+- Keep the 27.09.2026 Strohballen-Wettrollen competition day as its own Vereinsleben story, separate from the Echem preparation training. Its detail view includes all 16 supplied competition photos and two web-converted competition videos; the original media files remain untouched.
 - Detail-page photos open in a large click-through lightbox with previous/next controls and Escape/backdrop close.
 - Keep Training & Spiele as a separate Vereinsleben gallery, outside the Blog stories; its overview preview links to the complete source-folder gallery.
 - Keep social links close to Vereinsleben & Aktuelles; show the Instagram icon and channel link consistently in the footer of every page.

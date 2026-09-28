@@ -41,6 +41,11 @@ nav { display:flex; gap:28px; font-size:12px; font-weight:600; color:#e8e8e8; } 
 @media (max-width:460px) { .training-media-preview { grid-template-columns:1fr 1fr; min-height:190px; } }
 
 /* Keep long German words inside the viewport on narrow screens. */
+.news-videos { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.news-videos figure { min-width:0; }
+.news-videos video { height:auto; aspect-ratio:16 / 9; }
+.news-videos figcaption { position:static; padding:12px 14px; background:#111; }
+@media (max-width:600px) { .news-videos { grid-template-columns:1fr; } }
 h1, h2, h3, .text-link, .header-cta { max-width:100%; overflow-wrap:anywhere; }
 @media (max-width:800px) {
   body { overflow-x:hidden; }
@@ -54,3 +59,4 @@ h1, h2, h3, .text-link, .header-cta { max-width:100%; overflow-wrap:anywhere; }
   .training-location { grid-column:auto; grid-template-columns:1fr; gap:28px; }
   .training-location-guide img { width:100%; height:auto; }
 }
+@media (max-width:460px) { .news-hero h1 { font-size:43px; } }
