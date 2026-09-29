@@ -89,6 +89,8 @@ h1, h2, h3, .text-link, .header-cta { max-width:100%; overflow-wrap:anywhere; }
 .trailer-feature-copy .text-link { color:#fff; }
 .trailer-feature video { display:block; width:min(100%,360px); aspect-ratio:404/720; max-height:640px; justify-self:center; object-fit:contain; background:#000; border:1px solid #444; }
 .form-notice { margin:0; color:#333; font-size:14px; line-height:1.5; }
+.form-notice-error { color:#a51422; }
+.contact-form button:disabled { cursor:wait; opacity:.65; }
 @media (max-width:1100px) and (min-width:801px) { .site-header { gap:17px; padding-inline:22px; } .site-header nav { gap:14px; } .header-cta { padding-inline:13px; } }
 @media (max-width:800px) { .site-header .language-switch { order:3; margin-left:auto; } .site-header nav { order:4; } .trailer-feature { grid-template-columns:1fr; } .trailer-feature video { max-height:540px; } .intro-video-frame { min-height:430px; } }
 @media (max-width:460px) { .trailer-feature-copy h2 { font-size:clamp(52px,15vw,72px); } .intro-video-frame { padding:14px; } }
