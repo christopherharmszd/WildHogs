@@ -62,6 +62,26 @@ function NewsHeader() {
   return <SiteHeader active="news" />;
 }
 
+function UpcomingMatch() {
+  const poster = sitePath("assets/aktuelles/u16-sg-nordstern-rhein-west-2026-11-07.jpeg");
+  return <section className="news-fixtures match-announcement section-dark" aria-labelledby="match-title">
+    <div className="match-copy">
+      <p className="eyebrow red-text">{english ? "7 November 2026 · U16 rugby" : "07.11.2026 · U16-Rugby"}</p>
+      <h2 id="match-title">{english ? "FIRST LEAGUE MATCH" : "ERSTES LIGASPIEL"}<br /><em>IN SCHARNEBECK.</em></h2>
+      <p>{english ? "The Wild Hogs invite you to cheer on SG Nordstern U16 against SG Rhein West U16. Come along for the first U16 league match in Scharnebeck!" : "Die Wild Hogs laden ein: SG Nordstern U16 trifft auf SG Rhein West U16. Seid beim ersten U16-Ligaspiel in Scharnebeck dabei und feuert die Teams an!"}</p>
+      <dl className="match-facts">
+        <div><dt>{english ? "When" : "Wann"}</dt><dd><time dateTime="2026-11-07T13:00:00+01:00">{english ? "7 November 2026 · Kick-off at 13:00" : "7. November 2026 · Ankick um 13 Uhr"}</time></dd></div>
+        <div><dt>{english ? "Where" : "Wo"}</dt><dd>{english ? "Sports field at Schulzentrum Schiffshebewerk, Scharnebeck" : "Sportplatz am Schulzentrum Schiffshebewerk in Scharnebeck"}</dd></div>
+        <div><dt>{english ? "Refreshments" : "Verpflegung"}</dt><dd>{english ? "Coffee, cake and more will be available." : "Für Kaffee, Kuchen und mehr ist gesorgt."}</dd></div>
+      </dl>
+      <a className="text-link" href={poster} target="_blank" rel="noopener noreferrer">{english ? "Open the full-size poster" : "Plakat in voller Größe öffnen"} <span>↗</span></a>
+    </div>
+    <a className="match-poster" href={poster} target="_blank" rel="noopener noreferrer" aria-label={english ? "Open match poster in full size (German, new tab)" : "Spielplakat in voller Größe öffnen (neuer Tab)"}>
+      <img src={poster} width="1024" height="1536" alt={english ? "Wild Hogs invitation: SG Nordstern U16 vs SG Rhein West U16, 7 November 2026 at 13:00, Scharnebeck. German event poster." : "Einladung der Wild Hogs: SG Nordstern U16 gegen SG Rhein West U16 am 7. November 2026 um 13 Uhr in Scharnebeck."} />
+    </a>
+  </section>;
+}
+
 function PostDetail({ post }) {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const closeLightbox = () => setLightboxIndex(null);
@@ -126,6 +146,7 @@ export function News() {
   return <main className="news-page">
     <NewsHeader />
     <section className="news-hero section-dark"><p className="eyebrow red-text">{english ? "Beyond the pitch" : "Nicht nur auf dem Platz"}</p><h1>{english ? "CLUB LIFE" : "VEREINSLEBEN"}<br /><em>{english ? "& NEWS." : "& AKTUELLES."}</em></h1><p>{english ? "What happens beyond training and match days: special events, small adventures and stories from our team." : "Was bei den Wild Hogs neben Training und Spieltagen passiert: besondere Tage, kleine Abenteuer und Geschichten aus unserem Team."}</p></section>
+    <UpcomingMatch />
     <section className="trailer-feature section-dark" aria-labelledby="trailer-title">
       <div className="trailer-feature-copy"><p className="eyebrow red-text">{english ? "The Wild Hogs film · 27 September 2026" : "Der Wild-Hogs-Film · 27.09.2026"}</p><h2 id="trailer-title">HOGS ON<br /><em>A ROLL.</em></h2><p>{english ? "Our trailer for the straw-bale rolling event: a special day for the women's team, the mixed men's team and everyone cheering them on." : "Unser Trailer zum Strohballenwettrollen: ein besonderer Tag für das Frauenteam, das Mixed-Männerteam und alle, die am Streckenrand mitgefiebert haben."}</p><a className="text-link" href={localizedPath("aktuelles.html?post=strohballen-wettkampf")}>{english ? "Read the full story and see the photos" : "Zur ganzen Geschichte und allen Fotos"} <span>→</span></a></div>
       <video controls playsInline preload="metadata" poster={sitePath("assets/gallery/strohballen-wettkampf/wild-hogs-trailer-poster.png")} aria-label={english ? "Wild Hogs straw-bale rolling trailer" : "Wild-Hogs-Trailer zum Strohballenwettrollen"}><source src={sitePath("assets/gallery/strohballen-wettkampf/wild-hogs-trailer.m4v")} type="video/mp4" />{english ? "Your browser cannot play this video." : "Dein Browser kann dieses Video nicht abspielen."}</video>
@@ -135,7 +156,6 @@ export function News() {
       <div className="news-posts">{localizedPosts.map((post) => <a className="news-card-link" href={localizedPath(`aktuelles.html?post=${post.slug}`)} aria-label={`${post.title} – ${english ? "read the full story" : "ganze Geschichte ansehen"}`} key={post.slug}><article className={`news-post ${post.className || ""}`}><div className="news-post-media">{post.images.map((image, index) => <img key={image} src={image} alt={`${post.title} – ${english ? "photo" : "Foto"} ${index + 1}`} loading="lazy" />)}</div><div><p className="eyebrow red-text">{post.label}</p><h3>{post.title}</h3><p>{post.text}</p><span className="text-link">{english ? "Read the full story" : "Ganze Geschichte ansehen"} <span>→</span></span></div></article></a>)}</div>
       <a className="training-media-card" href={localizedPath("aktuelles.html?gallery=training")}><div className="training-media-copy"><p className="eyebrow red-text">{english ? "Everyday rugby" : "Rugby im Alltag"}</p><h2>TRAINING<br /><em>{english ? "& GAMES." : "& SPIELE."}</em></h2><p>{english ? "A place for training moments, matches and team photos – separate from the special blog stories." : "Der feste Ort für Trainingsmomente, Spieltage und Mannschaftsbilder – getrennt von den besonderen Bloggeschichten."}</p><span className="text-link">{english ? "See the photo gallery" : "Zur Bildergalerie"} <span>→</span></span></div><div className="training-media-preview"><img src={sitePath("assets/gallery/training-spiele/WhatsApp Image 2026-09-13 at 13.23.12.jpeg")} alt={english ? "The Wild Hogs at a match" : "Die Wild Hogs bei einem Spieltag"} /><img src={sitePath("assets/gallery/training-spiele/87ca81f9-ad36-4fe7-a8d2-788ee26763db.jpeg")} alt={english ? "Wild Hogs rugby training" : "Training der Wild Hogs auf dem Sportplatz"} /><img src={sitePath("assets/gallery/training-spiele/2c40369f-dbd0-4259-a881-0e41a0286d16.jpeg")} alt={english ? "Wild Hogs rugby drill" : "Rugby-Übung der Wild Hogs"} /></div></a>
     </section>
-    <section className="news-fixtures section-dark"><div><p className="eyebrow red-text">{english ? "Rugby stays rugby" : "Rugby bleibt Rugby"}</p><h2>{english ? "FIXTURES" : "SPIELPLAN &"}<br /><em>{english ? "& EVENTS." : "TERMINE."}</em></h2><p>{english ? "Future matches, tournaments and other rugby dates can be shared here." : "Auf dieser Seite können später Spieltage, Turniere und besondere Rugby-Termine gesammelt werden."}</p></div><div className="fixture-board"><div className="fixture-board-row"><strong>{english ? "Coming up" : "Demnächst"}</strong><span>{english ? "New matches and tournament dates will be posted here." : "Neue Spiel- und Turniertermine werden hier veröffentlicht."}</span></div><a className="text-link" href="https://tus-hohnstorf.de/rugby/" target="_blank" rel="noopener noreferrer">{english ? "TuS rugby page" : "Zum TuS-Rugbybereich"} <span>↗</span></a></div></section>
     <SiteFooter />
   </main>;
 }
