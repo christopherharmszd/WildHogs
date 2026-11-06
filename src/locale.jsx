@@ -1,18 +1,19 @@
 import { sitePath } from "./paths.js";
 
-export const language = new URLSearchParams(window.location.search).get("lang") === "en" ? "en" : "de";
+const basePath = sitePath("");
+const englishPrefix = `${basePath}en/`;
+export const language = window.location.pathname.startsWith(englishPrefix) || new URLSearchParams(window.location.search).get("lang") === "en" ? "en" : "de";
 export const english = language === "en";
 
 export function localizedPath(path = "") {
-  const url = new URL(sitePath(path), window.location.origin);
-  if (english) url.searchParams.set("lang", "en");
-  return `${url.pathname}${url.search}${url.hash}`;
+  return sitePath(`${english ? "en/" : ""}${path}`);
 }
 
 function switchPath(nextLanguage) {
   const url = new URL(window.location.href);
-  if (nextLanguage === "en") url.searchParams.set("lang", "en");
-  else url.searchParams.delete("lang");
+  const relativePath = url.pathname.startsWith(englishPrefix) ? url.pathname.slice(englishPrefix.length) : url.pathname.slice(basePath.length);
+  url.pathname = `${basePath}${nextLanguage === "en" ? "en/" : ""}${relativePath}`;
+  url.searchParams.delete("lang");
   return `${url.pathname}${url.search}${url.hash}`;
 }
 

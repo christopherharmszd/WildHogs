@@ -1,8 +1,8 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { mount } from "./mount.jsx";
 import { Privacy } from "./Privacy.jsx";
 import { english, setPageLanguage } from "./locale.jsx";
 import "./styles.css";
 
-setPageLanguage(english ? "Privacy · Wild Hogs Rugby" : "Datenschutz · Wild Hogs Rugby");
-createRoot(document.getElementById("privacy-root")).render(<Privacy />);
+setPageLanguage(english ? "Privacy notice · Wild Hogs Rugby" : "Datenschutz · Wild Hogs Rugby");
+mount(<Privacy />, document.getElementById("privacy-root"));

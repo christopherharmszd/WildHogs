@@ -76,6 +76,12 @@ h1, h2, h3, .text-link, .header-cta { max-width:100%; overflow-wrap:anywhere; }
 }
 @media (max-width:460px) { .news-hero h1 { font-size:43px; } }
 
+/* Keep long place and section names together on narrow phones. */
+@media (max-width:460px) {
+  .news-hero h1 { font-size:clamp(29px,9vw,40px); overflow-wrap:normal; }
+  .match-announcement h2 { font-size:clamp(29px,9vw,40px); overflow-wrap:normal; }
+}
+
 .legal-hero { padding:clamp(80px,10vw,140px) clamp(22px,9vw,140px); }
 .legal-hero h1 { font-size:clamp(58px,9vw,132px); }
 .legal-content { display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,8vw,120px); min-height:42vh; }

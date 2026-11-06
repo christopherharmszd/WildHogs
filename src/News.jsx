@@ -58,6 +58,19 @@ const localizedTrainingGallery = english ? {
   text: "Rugby is about more than special events. Here we collect photos from training, match days and the team."
 } : trainingSpieleGallery;
 
+export const newsDetailSlugs = [...posts.map((post) => post.slug), trainingSpieleGallery.slug];
+
+export function newsDetailPath(slug) {
+  return `geschichten/${slug}.html`;
+}
+
+export function activeNewsDetail() {
+  const pathMatch = window.location.pathname.match(/\/geschichten\/([a-z0-9-]+)\.html$/);
+  const params = new URLSearchParams(window.location.search);
+  const slug = pathMatch?.[1] || params.get("post") || (params.get("gallery") === "training" ? trainingSpieleGallery.slug : null);
+  return localizedPosts.find((post) => post.slug === slug) || (slug === trainingSpieleGallery.slug ? localizedTrainingGallery : null);
+}
+
 function NewsHeader() {
   return <SiteHeader active="news" />;
 }
@@ -139,16 +152,14 @@ function PostDetail({ post }) {
 }
 
 export function News() {
-  const params = new URLSearchParams(window.location.search);
-  const activePost = localizedPosts.find((post) => post.slug === params.get("post"));
+  const activePost = activeNewsDetail();
   if (activePost) return <PostDetail post={activePost} />;
-  if (params.get("gallery") === "training") return <PostDetail post={localizedTrainingGallery} />;
   return <main className="news-page">
     <NewsHeader />
     <section className="news-hero section-dark"><p className="eyebrow red-text">{english ? "Beyond the pitch" : "Nicht nur auf dem Platz"}</p><h1>{english ? "CLUB LIFE" : "VEREINSLEBEN"}<br /><em>{english ? "& NEWS." : "& AKTUELLES."}</em></h1><p>{english ? "What happens beyond training and match days: special events, small adventures and stories from our team." : "Was bei den Wild Hogs neben Training und Spieltagen passiert: besondere Tage, kleine Abenteuer und Geschichten aus unserem Team."}</p></section>
     <UpcomingMatch />
     <section className="trailer-feature section-dark" aria-labelledby="trailer-title">
-      <div className="trailer-feature-copy"><p className="eyebrow red-text">{english ? "The Wild Hogs film · 27 September 2026" : "Der Wild-Hogs-Film · 27.09.2026"}</p><h2 id="trailer-title">HOGS ON<br /><em>A ROLL.</em></h2><p>{english ? "Our trailer for the straw-bale rolling event: a special day for the women's team, the mixed men's team and everyone cheering them on." : "Unser Trailer zum Strohballenwettrollen: ein besonderer Tag für das Frauenteam, das Mixed-Männerteam und alle, die am Streckenrand mitgefiebert haben."}</p><a className="text-link" href={localizedPath("aktuelles.html?post=strohballen-wettkampf")}>{english ? "Read the full story and see the photos" : "Zur ganzen Geschichte und allen Fotos"} <span>→</span></a></div>
+      <div className="trailer-feature-copy"><p className="eyebrow red-text">{english ? "The Wild Hogs film · 27 September 2026" : "Der Wild-Hogs-Film · 27.09.2026"}</p><h2 id="trailer-title">HOGS ON<br /><em>A ROLL.</em></h2><p>{english ? "Our trailer for the straw-bale rolling event: a special day for the women's team, the mixed men's team and everyone cheering them on." : "Unser Trailer zum Strohballenwettrollen: ein besonderer Tag für das Frauenteam, das Mixed-Männerteam und alle, die am Streckenrand mitgefiebert haben."}</p><a className="text-link" href={localizedPath(newsDetailPath("strohballen-wettkampf"))}>{english ? "Read the full story and see the photos" : "Zur ganzen Geschichte und allen Fotos"} <span>→</span></a></div>
       <video controls playsInline preload="metadata" poster={sitePath("assets/gallery/strohballen-wettkampf/wild-hogs-trailer-poster.png")} aria-label={english ? "Wild Hogs straw-bale rolling trailer" : "Wild-Hogs-Trailer zum Strohballenwettrollen"}><source src={sitePath("assets/gallery/strohballen-wettkampf/wild-hogs-trailer.m4v")} type="video/mp4" />{english ? "Your browser cannot play this video." : "Dein Browser kann dieses Video nicht abspielen."}</video>
     </section>
     <section className="news-content section-light">
@@ -165,8 +176,8 @@ export function News() {
           <a className="text-link" href="https://www.landeszeitung.de/sport/regional/scharnebeck-erstes-rugby-turnier-fuer-schulen-aus-stadt-und-landkreis-PA2MA57R6JB5JBOD42ITMQQ2Q4.html" target="_blank" rel="noopener noreferrer" aria-label={english ? "Read the Landeszeitung article in German (opens in a new tab)" : "Artikel bei der Landeszeitung lesen (öffnet in neuem Tab)"}>{english ? "Read the LZ article (in German)" : "Artikel bei der LZ lesen"} <span aria-hidden="true">↗</span></a>
         </div>
       </article>
-      <div className="news-posts">{localizedPosts.map((post) => <a className="news-card-link" href={localizedPath(`aktuelles.html?post=${post.slug}`)} aria-label={`${post.title} – ${english ? "read the full story" : "ganze Geschichte ansehen"}`} key={post.slug}><article className={`news-post ${post.className || ""}`}><div className="news-post-media">{post.images.map((image, index) => <img key={image} src={image} alt={`${post.title} – ${english ? "photo" : "Foto"} ${index + 1}`} loading="lazy" />)}</div><div><p className="eyebrow red-text">{post.label}</p><h3>{post.title}</h3><p>{post.text}</p><span className="text-link">{english ? "Read the full story" : "Ganze Geschichte ansehen"} <span>→</span></span></div></article></a>)}</div>
-      <a className="training-media-card" href={localizedPath("aktuelles.html?gallery=training")}><div className="training-media-copy"><p className="eyebrow red-text">{english ? "Everyday rugby" : "Rugby im Alltag"}</p><h2>TRAINING<br /><em>{english ? "& GAMES." : "& SPIELE."}</em></h2><p>{english ? "A place for training moments, matches and team photos – separate from the special blog stories." : "Der feste Ort für Trainingsmomente, Spieltage und Mannschaftsbilder – getrennt von den besonderen Bloggeschichten."}</p><span className="text-link">{english ? "See the photo gallery" : "Zur Bildergalerie"} <span>→</span></span></div><div className="training-media-preview"><img src={sitePath("assets/gallery/training-spiele/WhatsApp Image 2026-09-13 at 13.23.12.jpeg")} alt={english ? "The Wild Hogs at a match" : "Die Wild Hogs bei einem Spieltag"} /><img src={sitePath("assets/gallery/training-spiele/87ca81f9-ad36-4fe7-a8d2-788ee26763db.jpeg")} alt={english ? "Wild Hogs rugby training" : "Training der Wild Hogs auf dem Sportplatz"} /><img src={sitePath("assets/gallery/training-spiele/2c40369f-dbd0-4259-a881-0e41a0286d16.jpeg")} alt={english ? "Wild Hogs rugby drill" : "Rugby-Übung der Wild Hogs"} /></div></a>
+      <div className="news-posts">{localizedPosts.map((post) => <a className="news-card-link" href={localizedPath(newsDetailPath(post.slug))} aria-label={`${post.title} – ${english ? "read the full story" : "ganze Geschichte ansehen"}`} key={post.slug}><article className={`news-post ${post.className || ""}`}><div className="news-post-media">{post.images.map((image, index) => <img key={image} src={image} alt={`${post.title} – ${english ? "photo" : "Foto"} ${index + 1}`} loading="lazy" />)}</div><div><p className="eyebrow red-text">{post.label}</p><h3>{post.title}</h3><p>{post.text}</p><span className="text-link">{english ? "Read the full story" : "Ganze Geschichte ansehen"} <span>→</span></span></div></article></a>)}</div>
+      <a className="training-media-card" href={localizedPath(newsDetailPath(trainingSpieleGallery.slug))}><div className="training-media-copy"><p className="eyebrow red-text">{english ? "Everyday rugby" : "Rugby im Alltag"}</p><h2>TRAINING<br /><em>{english ? "& GAMES." : "& SPIELE."}</em></h2><p>{english ? "A place for training moments, matches and team photos – separate from the special blog stories." : "Der feste Ort für Trainingsmomente, Spieltage und Mannschaftsbilder – getrennt von den besonderen Bloggeschichten."}</p><span className="text-link">{english ? "See the photo gallery" : "Zur Bildergalerie"} <span>→</span></span></div><div className="training-media-preview"><img src={sitePath("assets/gallery/training-spiele/WhatsApp Image 2026-09-13 at 13.23.12.jpeg")} alt={english ? "The Wild Hogs at a match" : "Die Wild Hogs bei einem Spieltag"} /><img src={sitePath("assets/gallery/training-spiele/87ca81f9-ad36-4fe7-a8d2-788ee26763db.jpeg")} alt={english ? "Wild Hogs rugby training" : "Training der Wild Hogs auf dem Sportplatz"} /><img src={sitePath("assets/gallery/training-spiele/2c40369f-dbd0-4259-a881-0e41a0286d16.jpeg")} alt={english ? "Wild Hogs rugby drill" : "Rugby-Übung der Wild Hogs"} /></div></a>
     </section>
     <SiteFooter />
   </main>;

@@ -1,12 +1,13 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { mount } from "./mount.jsx";
 import { App } from "./App.jsx";
-import { english, setPageLanguage } from "./locale.jsx";
+import { setPageLanguage } from "./locale.jsx";
 import "./styles.css";
 
-setPageLanguage(english ? "Wild Hogs Rugby · Hohnstorf" : "Wild Hogs Rugby · Hohnstorf");
-createRoot(document.getElementById("root")).render(
+setPageLanguage("Wild Hogs Rugby · Hohnstorf");
+mount(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
+  document.getElementById("root"),
 );
