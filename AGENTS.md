@@ -10,6 +10,8 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 ## Durable prototype decisions
 
+- Keep recurring training information and match dates together on a dedicated, indexable `termine.html` page. Give each individual match a separate detail URL with exact date, teams, venue and locally hosted poster; link it from the overview and relevant Vereinsleben content. Maintain both German and English versions. A match is not guaranteed to appear in Google Search on the same day it is published.
+
 - Keep Rugby content and Vereinsleben content clearly separate.
 - Place external press coverage in a clearly labeled "Aus der Presse" card on Vereinsleben, with an original short summary and a link to the source; do not copy the publisher's article text or imagery. Keep the German/English site language consistent and mark German-only sources on the English view.
 - A content-management interface (Studio/Backstage) is a future project, not part of the current site. For now, editorial content is maintained in the repository and published through GitHub Pages; Web3Forms only handles contact submissions. Plan editorial roles, content types, media workflow, and publishing permissions before building a CMS.

@@ -6,7 +6,7 @@ export function SiteHeader({ active = "" }) {
   const nav = [
     ["start", "Start", "Home", "index.html#start"],
     ["rugby", "Rugby", "Rugby", "index.html#rugby"],
-    ["training", "Training", "Training", "index.html#training"],
+    ["training", "Training", "Training", "termine.html"],
     ["news", "Vereinsleben", "Club life", "aktuelles.html"],
     ["contact", "Komm vorbei", "Join us", "kontakt.html"],
   ];

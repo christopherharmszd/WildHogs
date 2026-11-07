@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { gallerySets } from "./galleryData.js";
 import { english, localizedPath } from "./locale.jsx";
 import { sitePath } from "./paths.js";
+import { matchPath } from "./eventData.js";
 import { SiteFooter, SiteHeader } from "./SiteChrome.jsx";
 
 const posts = [
@@ -87,6 +88,7 @@ function UpcomingMatch() {
         <div><dt>{english ? "Where" : "Wo"}</dt><dd>{english ? "Sports field at Schulzentrum Schiffshebewerk, Scharnebeck" : "Sportplatz am Schulzentrum Schiffshebewerk in Scharnebeck"}</dd></div>
         <div><dt>{english ? "Refreshments" : "Verpflegung"}</dt><dd>{english ? "Coffee, cake and more will be available." : "Für Kaffee, Kuchen und mehr ist gesorgt."}</dd></div>
       </dl>
+      <a className="text-link" href={localizedPath(matchPath())}>{english ? "All match details" : "Alle Infos zum Spiel"} <span>→</span></a><br />
       <a className="text-link" href={poster} target="_blank" rel="noopener noreferrer">{english ? "Open the full-size poster" : "Plakat in voller Größe öffnen"} <span>↗</span></a>
     </div>
     <a className="match-poster" href={poster} target="_blank" rel="noopener noreferrer" aria-label={english ? "Open match poster in full size (German, new tab)" : "Spielplakat in voller Größe öffnen (neuer Tab)"}>

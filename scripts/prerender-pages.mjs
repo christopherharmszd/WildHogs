@@ -3,12 +3,13 @@ import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { match, matchPath } from "../src/eventData.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist", "client");
 const templatesDir = path.join(root, "dist", "prerender-templates");
 const origin = "https://wildhogsrugby.de";
-const topLevel = ["index.html", "aktuelles.html", "kontakt.html", "impressum.html", "datenschutz.html"];
+const topLevel = ["index.html", "aktuelles.html", "termine.html", "kontakt.html", "impressum.html", "datenschutz.html"];
 const details = ["strohballen-wettkampf", "sommercamp", "strohballen", "dorfparade", "training-spiele"];
 
 if (!process.argv[2]) {
@@ -18,7 +19,7 @@ if (!process.argv[2]) {
     const result = spawnSync(process.execPath, [fileURLToPath(import.meta.url), lang], { stdio: "inherit", env: process.env });
     if (result.status !== 0) process.exit(result.status || 1);
   }
-  const routes = [...topLevel.map((file) => file === "index.html" ? "" : file), ...details.map((slug) => `geschichten/${slug}.html`)];
+  const routes = [...topLevel.map((file) => file === "index.html" ? "" : file), ...details.map((slug) => `geschichten/${slug}.html`), matchPath()];
   const urls = routes.flatMap((route) => [route, `en/${route}`]);
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((route) => `  <url><loc>${origin}/${route}</loc></url>`).join("\n")}\n</urlset>\n`;
   writeFileSync(path.join(dist, "sitemap.xml"), xml);
@@ -37,9 +38,10 @@ const { createServer } = await import("vite");
 const server = await createServer({ configFile: path.join(root, "vite.config.mjs"), server: { middlewareMode: true, hmr: false }, optimizeDeps: { noDiscovery: true, include: [] }, appType: "custom", logLevel: "silent" });
 
 try {
-  const [{ App }, { News, activeNewsDetail }, { Contact }, { Legal }, { Privacy }] = await Promise.all([
+  const [{ App }, { News, activeNewsDetail }, { EventsOverview, EventDetail }, { Contact }, { Legal }, { Privacy }] = await Promise.all([
     server.ssrLoadModule("/src/App.jsx"),
     server.ssrLoadModule("/src/News.jsx"),
+    server.ssrLoadModule("/src/Events.jsx"),
     server.ssrLoadModule("/src/Contact.jsx"),
     server.ssrLoadModule("/src/Legal.jsx"),
     server.ssrLoadModule("/src/Privacy.jsx"),
@@ -61,6 +63,13 @@ try {
       image: `${origin}/assets/gallery/strohballen-wettkampf/65d8e7ec-82aa-47fa-ae48-53d94d79ede0.jpeg`,
       component: News,
       rootId: "news-root",
+    },
+    "termine.html": {
+      title: lang === "en" ? "Rugby training times & fixtures in Scharnebeck · Wild Hogs" : "Rugby-Trainingszeiten & Spieltermine in Scharnebeck · Wild Hogs",
+      description: lang === "en" ? "Wild Hogs rugby in Scharnebeck: training on Mondays 16:00–18:00 and Saturdays 10:00–12:00 for children aged 8 and over. Match dates, venue and directions." : "Wild Hogs Rugby in Scharnebeck: Training montags 16–18 Uhr und samstags 10–12 Uhr für Kinder ab 8 Jahren. Hier stehen auch Spieltermine, Sportplatz und Anfahrt.",
+      image: homeImage,
+      component: EventsOverview,
+      rootId: "events-root",
     },
     "kontakt.html": {
       title: lang === "en" ? "Try rugby & contact · Wild Hogs Rugby" : "Probetraining & Kontakt · Wild Hogs Rugby",
@@ -86,6 +95,35 @@ try {
   };
 
   for (const [filename, info] of Object.entries(metadata)) writePage(filename, filename, info);
+
+  const matchRoute = matchPath();
+  const matchTitle = lang === "en" ? match.titleEn : match.titleDe;
+  const matchDescription = lang === "en"
+    ? "U16 rugby league match in Scharnebeck: SG Nordstern U16 vs SG Rhein West U16 on 7 November 2026 at 13:00 at Schulzentrum Schiffshebewerk."
+    : "U16-Rugby-Ligaspiel in Scharnebeck: SG Nordstern U16 gegen SG Rhein West U16 am 7. November 2026 um 13 Uhr am Schulzentrum Schiffshebewerk.";
+  writePage("termine.html", matchRoute, {
+    title: lang === "en" ? `${matchTitle} on 7 November 2026 · Wild Hogs Rugby` : `${matchTitle} am 7. November 2026 · Wild Hogs Rugby`,
+    description: matchDescription,
+    image: `${origin}/${match.poster}`,
+    component: EventDetail,
+    rootId: "events-root",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      name: matchTitle,
+      description: matchDescription,
+      startDate: match.date,
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      image: `${origin}/${match.poster}`,
+      url: `${origin}/${prefix}${matchRoute}`,
+      location: {
+        "@type": "Place",
+        name: match.placeDe,
+        address: { "@type": "PostalAddress", streetAddress: "Duvenbornsweg 5a", postalCode: "21379", addressLocality: "Scharnebeck", addressCountry: "DE" },
+      },
+    },
+  });
 
   for (const slug of details) {
     const route = `geschichten/${slug}.html`;
@@ -133,6 +171,7 @@ try {
       `<meta name="twitter:card" content="summary_large_image" />`,
       `<meta name="twitter:image" content="${escapeHtml(image)}" />`,
       `<script type="application/ld+json">${JSON.stringify(pageData).replaceAll("<", "\\u003c")}</script>`,
+      ...(info.structuredData ? [`<script type="application/ld+json">${JSON.stringify(info.structuredData).replaceAll("<", "\\u003c")}</script>`] : []),
     ].join("\n    ");
     const rootMarker = `<div id="${info.rootId}"></div>`;
     const html = readFileSync(path.join(templatesDir, templateName), "utf8");
