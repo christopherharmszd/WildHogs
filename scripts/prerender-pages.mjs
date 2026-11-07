@@ -4,12 +4,13 @@ import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { match, matchPath } from "../src/eventData.js";
+import { pressDetailPath } from "../src/pressData.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist", "client");
 const templatesDir = path.join(root, "dist", "prerender-templates");
 const origin = "https://wildhogsrugby.de";
-const topLevel = ["index.html", "aktuelles.html", "termine.html", "kontakt.html", "impressum.html", "datenschutz.html"];
+const topLevel = ["index.html", "aktuelles.html", "presse.html", "termine.html", "kontakt.html", "impressum.html", "datenschutz.html"];
 const details = ["strohballen-wettkampf", "sommercamp", "strohballen", "dorfparade", "training-spiele"];
 
 if (!process.argv[2]) {
@@ -19,7 +20,7 @@ if (!process.argv[2]) {
     const result = spawnSync(process.execPath, [fileURLToPath(import.meta.url), lang], { stdio: "inherit", env: process.env });
     if (result.status !== 0) process.exit(result.status || 1);
   }
-  const routes = [...topLevel.map((file) => file === "index.html" ? "" : file), ...details.map((slug) => `geschichten/${slug}.html`), matchPath()];
+  const routes = [...topLevel.map((file) => file === "index.html" ? "" : file), ...details.map((slug) => `geschichten/${slug}.html`), pressDetailPath, matchPath()];
   const urls = routes.flatMap((route) => [route, `en/${route}`]);
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((route) => `  <url><loc>${origin}/${route}</loc></url>`).join("\n")}\n</urlset>\n`;
   writeFileSync(path.join(dist, "sitemap.xml"), xml);
@@ -38,9 +39,10 @@ const { createServer } = await import("vite");
 const server = await createServer({ configFile: path.join(root, "vite.config.mjs"), server: { middlewareMode: true, hmr: false }, optimizeDeps: { noDiscovery: true, include: [] }, appType: "custom", logLevel: "silent" });
 
 try {
-  const [{ App }, { News, activeNewsDetail }, { EventsOverview, EventDetail }, { Contact }, { Legal }, { Privacy }] = await Promise.all([
+  const [{ App }, { News, activeNewsDetail }, { PressArchive, PressStory }, { EventsOverview, EventDetail }, { Contact }, { Legal }, { Privacy }] = await Promise.all([
     server.ssrLoadModule("/src/App.jsx"),
     server.ssrLoadModule("/src/News.jsx"),
+    server.ssrLoadModule("/src/Press.jsx"),
     server.ssrLoadModule("/src/Events.jsx"),
     server.ssrLoadModule("/src/Contact.jsx"),
     server.ssrLoadModule("/src/Legal.jsx"),
@@ -63,6 +65,13 @@ try {
       image: `${origin}/assets/gallery/strohballen-wettkampf/65d8e7ec-82aa-47fa-ae48-53d94d79ede0.jpeg`,
       component: News,
       rootId: "news-root",
+    },
+    "presse.html": {
+      title: lang === "en" ? "In the press · Wild Hogs Rugby" : "Aus der Presse · Wild Hogs Rugby",
+      description: lang === "en" ? "Press coverage of the Wild Hogs and rugby in the region, with links to the original reports." : "Presseberichte über die Wild Hogs und Rugby in der Region – mit Links zu den Originalartikeln.",
+      image: homeImage,
+      component: PressArchive,
+      rootId: "press-root",
     },
     "termine.html": {
       title: lang === "en" ? "Rugby training times & fixtures in Scharnebeck · Wild Hogs" : "Rugby-Trainingszeiten & Spieltermine in Scharnebeck · Wild Hogs",
@@ -95,6 +104,14 @@ try {
   };
 
   for (const [filename, info] of Object.entries(metadata)) writePage(filename, filename, info);
+
+  writePage("presse.html", pressDetailPath, {
+    title: lang === "en" ? "First school rugby tournament in Scharnebeck · Wild Hogs Rugby" : "Erstes Schulrugbyturnier in Scharnebeck · Wild Hogs Rugby",
+    description: lang === "en" ? "Four schools took part in Scharnebeck's first school rugby tournament. Read the Wild Hogs story and the original Landeszeitung report." : "Vier Schulen beim ersten Schulrugbyturnier in Scharnebeck: die Geschichte der Wild Hogs und der Originalbericht der Landeszeitung.",
+    image: homeImage,
+    component: PressStory,
+    rootId: "press-root",
+  });
 
   const matchRoute = matchPath();
   const matchTitle = lang === "en" ? match.titleEn : match.titleDe;
@@ -162,7 +179,7 @@ try {
       `<link rel="alternate" hreflang="de" href="${alternateDe}" />`,
       `<link rel="alternate" hreflang="en" href="${alternateEn}" />`,
       `<link rel="alternate" hreflang="x-default" href="${alternateDe}" />`,
-      `<meta property="og:type" content="${route.startsWith("geschichten/") ? "article" : "website"}" />`,
+      `<meta property="og:type" content="${route.startsWith("geschichten/") || route === pressDetailPath ? "article" : "website"}" />`,
       `<meta property="og:title" content="${escapeHtml(info.title)}" />`,
       `<meta property="og:description" content="${escapeHtml(info.description)}" />`,
       `<meta property="og:url" content="${canonical}" />`,

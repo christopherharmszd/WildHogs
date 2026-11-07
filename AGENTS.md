@@ -14,6 +14,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 - Keep Rugby content and Vereinsleben content clearly separate.
 - Place external press coverage in a clearly labeled "Aus der Presse" card on Vereinsleben, with an original short summary and a link to the source; do not copy the publisher's article text or imagery. Keep the German/English site language consistent and mark German-only sources on the English view.
+- Keep the direct Landeszeitung link in the Vereinsleben press card. A separate school-rugby story and a bilingual press archive give coverage a shareable home and room for future entries. Use only verified facts, original wording, club-owned imagery, and a clear link to each publisher's original report.
 - A content-management interface (Studio/Backstage) is a future project, not part of the current site. For now, editorial content is maintained in the repository and published through GitHub Pages; Web3Forms only handles contact submissions. Plan editorial roles, content types, media workflow, and publishing permissions before building a CMS.
 - The Vereinsleben page starts with separate entries for the Rugby Summer Camp on Langeoog during the 2026 summer holidays (details and photos will be added later), the special straw-bale preparation in Echem for the 27.09.2026 event (women's team and mixed men's team; supplied straw-bale photos), and the first Wild Hogs participation in the Dorfparade on 29.08.2026.
 - Use port `4182` for the Wild-Hogs local preview so it stays separate from other local prototypes.

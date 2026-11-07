@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: "index.html",
         aktuelles: "aktuelles.html",
+        presse: "presse.html",
         termine: "termine.html",
         kontakt: "kontakt.html",
         impressum: "impressum.html",

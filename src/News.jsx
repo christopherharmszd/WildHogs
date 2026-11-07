@@ -4,6 +4,7 @@ import { english, localizedPath } from "./locale.jsx";
 import { sitePath } from "./paths.js";
 import { matchPath } from "./eventData.js";
 import { SiteFooter, SiteHeader } from "./SiteChrome.jsx";
+import { pressDetailPath, pressSourceUrl } from "./pressData.js";
 
 const posts = [
   {
@@ -175,7 +176,11 @@ export function News() {
         <div className="press-card-content">
           <h3 id="press-card-title">{english ? "Rugby goes to school." : "Rugby macht Schule."}</h3>
           <p>{english ? "Four schools met for Scharnebeck’s first school rugby tournament. The LZ reports on fair play, team spirit and how Manuela Oestreich and TuS Hohnstorf are helping bring rugby into local schools." : "Vier Schulen trafen sich zum ersten Schul-Rugbyturnier in Scharnebeck. Die LZ berichtet über Fairness und Teamgeist auf dem Platz – und darüber, wie Manuela Oestreich und der TuS Hohnstorf Rugby an die Schulen bringen."}</p>
-          <a className="text-link" href="https://www.landeszeitung.de/sport/regional/scharnebeck-erstes-rugby-turnier-fuer-schulen-aus-stadt-und-landkreis-PA2MA57R6JB5JBOD42ITMQQ2Q4.html" target="_blank" rel="noopener noreferrer" aria-label={english ? "Read the Landeszeitung article in German (opens in a new tab)" : "Artikel bei der Landeszeitung lesen (öffnet in neuem Tab)"}>{english ? "Read the LZ article (in German)" : "Artikel bei der LZ lesen"} <span aria-hidden="true">↗</span></a>
+          <div className="press-card-actions">
+            <a className="text-link" href={localizedPath(pressDetailPath)}>{english ? "Our story about the school tournament" : "Unsere Geschichte zum Schulturnier"} <span aria-hidden="true">→</span></a>
+            <a className="text-link" href={pressSourceUrl} target="_blank" rel="noopener noreferrer" aria-label={english ? "Read the Landeszeitung article in German (opens in a new tab)" : "Artikel bei der Landeszeitung lesen (öffnet in neuem Tab)"}>{english ? "Read the LZ article (in German)" : "Artikel bei der LZ lesen"} <span aria-hidden="true">↗</span></a>
+            <a className="press-more-link" href={localizedPath("presse.html")}>{english ? "All press coverage" : "Alle Presseberichte"} <span aria-hidden="true">→</span></a>
+          </div>
         </div>
       </article>
       <div className="news-posts">{localizedPosts.map((post) => <a className="news-card-link" href={localizedPath(newsDetailPath(post.slug))} aria-label={`${post.title} – ${english ? "read the full story" : "ganze Geschichte ansehen"}`} key={post.slug}><article className={`news-post ${post.className || ""}`}><div className="news-post-media">{post.images.map((image, index) => <img key={image} src={image} alt={`${post.title} – ${english ? "photo" : "Foto"} ${index + 1}`} loading="lazy" />)}</div><div><p className="eyebrow red-text">{post.label}</p><h3>{post.title}</h3><p>{post.text}</p><span className="text-link">{english ? "Read the full story" : "Ganze Geschichte ansehen"} <span>→</span></span></div></article></a>)}</div>

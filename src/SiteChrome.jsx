@@ -29,6 +29,7 @@ export function SiteFooter() {
     <div className="footer-links">
       <a href="https://tus-hohnstorf.de/rugby/" target="_blank" rel="noopener noreferrer">TuS Hohnstorf/Elbe</a>
       <InstagramLink>{english ? "Instagram" : "Instagram-Kanal"}</InstagramLink>
+      <a href={localizedPath("presse.html")}>{english ? "Press" : "Presse"}</a>
       <a href={localizedPath("kontakt.html")}>{english ? "Contact" : "Kontakt"}</a>
       <a href={localizedPath("impressum.html")}>{english ? "Legal notice" : "Impressum"}</a>
       <a href={localizedPath("datenschutz.html")}>{english ? "Privacy" : "Datenschutz"}</a>
